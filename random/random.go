@@ -1,4 +1,4 @@
-package random
+package gtRandom
 
 import (
 	"math/rand"
