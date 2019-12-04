@@ -38,8 +38,8 @@ func Request(url string, headers map[string]string, bodyByte []byte, method stri
 	return rspBody, nil
 }
 
-func NewJsonHeader() map[string]interface{} {
-	header := make(map[string]interface{})
+func NewJsonHeader() map[string]string {
+	header := make(map[string]string)
 	header["Content-Type"] = "application/json"
 	return header
 }
