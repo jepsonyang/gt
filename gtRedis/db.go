@@ -25,6 +25,7 @@ func Exist(conn redis.Conn, key string) (bool, error) {
 /*
 * 删除
 * @return 被删除的key个数
+* @note 删除不存在的key，不会报错
 **/
 func Delete(conn redis.Conn, keys []string) (int, error) {
 	if len(keys) <= 0 {
