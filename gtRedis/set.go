@@ -5,10 +5,24 @@ import (
 )
 
 /*
-* 添加成员到集合
-* @return 返回被添加到集合的新元素数量,不包括被忽略的元素;
+* 添加单个元素到集合
+* @return 是否执行了添加操作(已经存在的元素会被忽略，即此时返回值为false)
+* @note 已经存在的值，再次添加，不会报错，会被忽略;
 **/
-func SetAdd(conn redis.Conn, key string, values []string) (int, error) {
+func SetAdd(conn redis.Conn, key string, value string) (bool, error) {
+	if len(value) <= 0 {
+		return false, nil
+	}
+	count, err := SetAddArray(conn, key, []string{value})
+	return count == 1, err
+}
+
+/*
+* 添加多个元素到集合
+* @return 返回被添加到集合的新元素数量,不包括被忽略的元素;
+* @note 已经存在的元素，再次添加，不会报错，会被忽略;
+**/
+func SetAddArray(conn redis.Conn, key string, values []string) (int, error) {
 	if len(values) <= 0 {
 		return 0, nil
 	}
@@ -22,10 +36,24 @@ func SetAdd(conn redis.Conn, key string, values []string) (int, error) {
 }
 
 /*
-* 删除集合中的成员
-* @return 返回被删除的元素数量,不包括被忽略的元素;
+* 删除集合中的单个元素
+* @return 是否执行了删除操作(不再集合中的元素会被忽略，即此时返回值为false);
+* @note 删除集合中不存在的元素，不会报错，会被忽略;
 **/
-func SetRemove(conn redis.Conn, key string, values []string) (int, error) {
+func SetRemove(conn redis.Conn, key string, value string) (bool, error) {
+	if len(value) <= 0 {
+		return false, nil
+	}
+	count, err := SetRemoveArray(conn, key, []string{value})
+	return count==1, err
+}
+
+/*
+* 删除集合中的多个元素
+* @return 返回被删除的元素数量,不包括被忽略的元素;
+* @note 删除集合中不存在的值，不会报错，会被忽略;
+**/
+func SetRemoveArray(conn redis.Conn, key string, values []string) (int, error) {
 	args := redis.Args{}
 	args = args.Add(key)
 	for _, v := range values {

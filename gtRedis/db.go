@@ -23,11 +23,23 @@ func Exist(conn redis.Conn, key string) (bool, error) {
 }
 
 /*
-* 删除
-* @return 被删除的key个数
+* 删除单个key
 * @note 删除不存在的key，不会报错
 **/
-func Delete(conn redis.Conn, keys []string) (int, error) {
+func Delete(conn redis.Conn, key string) error {
+	if len(key) <= 0 {
+		return nil
+	}
+	_, err := DeleteArray(conn, []string{key})
+	return err
+}
+
+/*
+* 删除多个key
+* @return 被删除的key个数
+* @note keys中有不存在的key，不会报错
+**/
+func DeleteArray(conn redis.Conn, keys []string) (int, error) {
 	if len(keys) <= 0 {
 		return 0, nil
 	}
