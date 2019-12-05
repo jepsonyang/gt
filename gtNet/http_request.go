@@ -6,17 +6,28 @@ import (
 	"net/http"
 )
 
-/*
-* http请求
-**/
-func Request(url string, headers map[string]string, bodyByte []byte, method string) ([]byte, error) {
+func Post(url string, headers map[string]string, bodyByte []byte) ([]byte, error) {
+	return request(url, headers, bodyByte, "POST")
+}
+
+func Get(url string, headers map[string]string) ([]byte, error) {
+	return request(url, headers, []byte(""), "GET")
+}
+
+func NewJsonHeader() map[string]string {
+	header := make(map[string]string)
+	header["Content-Type"] = "application/json"
+	return header
+}
+
+func request(url string, headers map[string]string, bodyByte []byte, method string) ([]byte, error) {
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(bodyByte))
 	if err != nil {
 		return nil, err
 	}
 
 	if headers != nil {
-		for k,v := range headers {
+		for k, v := range headers {
 			req.Header.Add(k, v)
 		}
 	}
@@ -36,10 +47,4 @@ func Request(url string, headers map[string]string, bodyByte []byte, method stri
 	}
 
 	return rspBody, nil
-}
-
-func NewJsonHeader() map[string]string {
-	header := make(map[string]string)
-	header["Content-Type"] = "application/json"
-	return header
 }
