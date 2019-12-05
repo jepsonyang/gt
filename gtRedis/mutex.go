@@ -21,6 +21,9 @@ else
 end
 `
 
+var ErrLockExist = errors.New("lock already exist")
+var ErrLockNotExist = errors.New("lock not exist")
+
 var lockScript *redis.Script
 var unlockScript *redis.Script
 
@@ -35,9 +38,9 @@ type Mutex struct {
 	expire int
 }
 
-func (param *Mutex) New(key string, value string, expire int) {
-	param.key = "RedisUtilMutex:" + key
-	param.value = value
+func (param *Mutex) New(key string, expire int) {
+	param.key = "gtRedisMutex:" + key
+	param.value = "mutex_value"
 	param.expire = expire
 }
 
@@ -48,10 +51,10 @@ func (param *Mutex) Lock(conn redis.Conn) error {
 	args = args.Add(param.expire)
 	result, err := redis.Int(lockScript.Do(conn, args...))
 	if err != nil {
-		return err
+		return formatError(err, "do script failed. key: %s expire: %d", param.key, param.expire)
 	}
 	if result != 1 {
-		return errors.New("lock failed")
+		return ErrLockExist
 	}
 	return nil
 }
@@ -62,10 +65,10 @@ func (param *Mutex) Unlock(conn redis.Conn) error {
 	args = args.Add(param.value)
 	result, err := redis.Int(unlockScript.Do(conn, args...))
 	if err != nil {
-		return err
+		return formatError(err, "do script failed. key: %s", param.key)
 	}
 	if result == 0 {
-		return errors.New("unlock failed")
+		return ErrLockNotExist
 	}
 	return nil
 }

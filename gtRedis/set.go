@@ -17,7 +17,8 @@ func SetAdd(conn redis.Conn, key string, values []string) (int, error) {
 	for _, v := range values {
 		args = args.Add(v)
 	}
-	return redis.Int(conn.Do("SADD", args...))
+	count, err := redis.Int(conn.Do("SADD", args...))
+	return count, formatError(err, "SADD failed. key: %s values: %+v", key, values)
 }
 
 /*
@@ -30,7 +31,8 @@ func SetRemove(conn redis.Conn, key string, values []string) (int, error) {
 	for _, v := range values {
 		args = args.Add(v)
 	}
-	return redis.Int(conn.Do("SREM", args...))
+	count, err := redis.Int(conn.Do("SREM", args...))
+	return count, formatError(err, "SREM failed. key: %s values: %+v", key, values)
 }
 
 /*
@@ -40,7 +42,7 @@ func SetRemove(conn redis.Conn, key string, values []string) (int, error) {
 func SetIsMember(conn redis.Conn, key string, member string) (bool, error) {
 	result, err := redis.Int(conn.Do("SISMEMBER", key, member))
 	if err != nil {
-		return false, err
+		return false, formatError(err, "SISMEMBER failed. key: %s member: %s", key, member)
 	}
 	return result == 1, nil
 }
@@ -49,12 +51,14 @@ func SetIsMember(conn redis.Conn, key string, member string) (bool, error) {
 * 获取集合中的所有成员
 **/
 func SetMembers(conn redis.Conn, key string) ([]string, error) {
-	return redis.Strings(conn.Do("SMEMBERS", key))
+	members, err := redis.Strings(conn.Do("SMEMBERS", key))
+	return members, formatError(err, "SMEMBERS failed. key: %s", key)
 }
 
 /*
 * 获取集合的成员总数
 **/
 func SetMemberCount(conn redis.Conn, key string) (int, error) {
-	return redis.Int(conn.Do("SCARD", key))
+	count, err := redis.Int(conn.Do("SCARD", key))
+	return count, formatError(err, "SCARD failed. key: %s", key)
 }

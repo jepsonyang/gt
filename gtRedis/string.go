@@ -17,12 +17,13 @@ func StringSet(conn redis.Conn, key string, value string, expire int) error {
 		args = args.Add(expire)
 	}
 	_, err := conn.Do("SET", args...)
-	return err
+	return formatError(err, "SET failed. key: %s value: %s expire: %d", key, value, expire)
 }
 
 /*
 * 获取string值
 **/
 func StringGet(conn redis.Conn, key string) (string, error) {
-	return redis.String(conn.Do("GET", key))
+	value, err := redis.String(conn.Do("GET", key))
+	return value, formatError(err, "GET failed. key: %s", key)
 }

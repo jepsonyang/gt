@@ -10,7 +10,7 @@ import (
 **/
 func Expire(conn redis.Conn, key string, expire int) (bool, error) {
 	result, err := redis.Int(conn.Do("EXPIRE", key, expire))
-	return result == 1, err
+	return result == 1, formatError(err, "EXPIRE failed. key: %s expire: %d", key, expire)
 }
 
 /*
@@ -19,7 +19,7 @@ func Expire(conn redis.Conn, key string, expire int) (bool, error) {
 **/
 func Exist(conn redis.Conn, key string) (bool, error) {
 	result, err := redis.Int(conn.Do("EXISTS", key))
-	return result == 1, err
+	return result == 1, formatError(err, "EXISTS failed. key: %s", key)
 }
 
 /*
@@ -36,7 +36,8 @@ func Delete(conn redis.Conn, keys []string) (int, error) {
 		args = args.Add(v)
 	}
 
-	return redis.Int(conn.Do("DEL", args...))
+	count, err := redis.Int(conn.Do("DEL", args...))
+	return count, formatError(err, "DEL failed. keys: %+v", keys)
 }
 
 /*
@@ -61,6 +62,7 @@ func Scan(conn redis.Conn, cursor int, pattern string, count int) (nextCursor in
 	var arrValue []interface{}
 	arrValue, err = redis.Values(conn.Do("SCAN", args...))
 	if err != nil {
+		err = formatError(err, "SCAN failed. cursor: %d pattern: %s count: %d", cursor, pattern, count)
 		return
 	}
 
