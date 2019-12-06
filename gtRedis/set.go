@@ -38,7 +38,7 @@ func SetAddArray(conn redis.Conn, key string, values []string) (int, error) {
 /*
 * 删除集合中的单个元素
 * @return 是否执行了删除操作(不再集合中的元素会被忽略，即此时返回值为false);
-* @note 删除集合中不存在的元素，不会报错，会被忽略;
+* @note 删除集合中不存在的元素(甚至set的key都不存在)，不会报错，会被忽略;
 **/
 func SetRemove(conn redis.Conn, key string, value string) (bool, error) {
 	if len(value) <= 0 {
@@ -51,7 +51,7 @@ func SetRemove(conn redis.Conn, key string, value string) (bool, error) {
 /*
 * 删除集合中的多个元素
 * @return 返回被删除的元素数量,不包括被忽略的元素;
-* @note 删除集合中不存在的值，不会报错，会被忽略;
+* @note 删除集合中不存在的值(甚至set的key都不存在)，不会报错，会被忽略;
 **/
 func SetRemoveArray(conn redis.Conn, key string, values []string) (int, error) {
 	args := redis.Args{}
