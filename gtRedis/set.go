@@ -54,6 +54,9 @@ func SetRemove(conn redis.Conn, key string, value string) (bool, error) {
 * @note 删除集合中不存在的值(甚至set的key都不存在)，不会报错，会被忽略;
 **/
 func SetRemoveArray(conn redis.Conn, key string, values []string) (int, error) {
+	if len(values) <= 0 {
+		return 0, nil
+	}
 	args := redis.Args{}
 	args = args.Add(key)
 	for _, v := range values {
