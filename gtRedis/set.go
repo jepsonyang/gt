@@ -68,7 +68,7 @@ func SetRemoveArray(conn redis.Conn, key string, values []string) (int, error) {
 
 /*
 * 判断member是否为集合key的成员
-* @return 如果member元素是集合的成员,返回true;如果member不是集合的成员,或key不存在,返回false
+* @return 如果member元素是集合的成员,返回true;如果member不是集合的成员,返回false;如果key不存在，返回false，且不报错;
 **/
 func SetIsMember(conn redis.Conn, key string, member string) (bool, error) {
 	result, err := redis.Int(conn.Do("SISMEMBER", key, member))
@@ -80,6 +80,7 @@ func SetIsMember(conn redis.Conn, key string, member string) (bool, error) {
 
 /*
 * 获取集合中的所有成员
+* @return 如果key不存在，返回空数组[]，且不报错;
 **/
 func SetMembers(conn redis.Conn, key string) ([]string, error) {
 	members, err := redis.Strings(conn.Do("SMEMBERS", key))
@@ -88,6 +89,7 @@ func SetMembers(conn redis.Conn, key string) ([]string, error) {
 
 /*
 * 获取集合的成员总数
+* @return 如果key不存在，返回0，且不报错;
 **/
 func SetMemberCount(conn redis.Conn, key string) (int, error) {
 	count, err := redis.Int(conn.Do("SCARD", key))

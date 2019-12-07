@@ -26,5 +26,8 @@ func StringSet(conn redis.Conn, key string, value string, expire int) error {
 **/
 func StringGet(conn redis.Conn, key string) (string, error) {
 	value, err := redis.String(conn.Do("GET", key))
+	if err == redis.ErrNil {
+		return "", ErrKeyNotExist
+	}
 	return value, formatError(err, "GET failed. key: %s", key)
 }

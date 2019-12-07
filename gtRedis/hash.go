@@ -20,6 +20,7 @@ func HashSet(conn redis.Conn, key string, value interface{}) error {
 /*
 * 获取hash值
 * @dst 必须传入结构体对象指针
+* @note 如果key不存在，不报错，dst的的值不变;
 **/
 func HashGet(conn redis.Conn, key string, dst interface{}) error {
 	arrReply, err := redis.Values(conn.Do("HGETALL", key))
