@@ -5,33 +5,28 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
-	"encoding/hex"
 )
 
-func Md5(src string) string {
+func Md5(src string) []byte {
 	obj := md5.New()
 	obj.Write([]byte(src))
-	bytes := obj.Sum(nil)
-	return hex.EncodeToString(bytes)
+	return obj.Sum(nil)
 }
 
-func Sha1(src string) string {
+func Sha1(src string) []byte {
 	obj := sha1.New()
 	obj.Write([]byte(src))
-	bytes := obj.Sum(nil)
-	return hex.EncodeToString(bytes)
+	return obj.Sum(nil)
 }
 
-func Sha256(src string, key string) string {
+func Sha256(src string, key string) []byte {
 	obj := hmac.New(sha256.New, []byte(key))
 	obj.Write([]byte(src))
-	bytes := obj.Sum(nil)
-	return hex.EncodeToString(bytes)
+	return obj.Sum(nil)
 }
 
-func HMACSHA1(src string, key string) string {
+func HMACSha1(src string, key string) []byte {
 	obj := hmac.New(sha1.New, []byte(key))
 	obj.Write([]byte(src))
-	bytes := obj.Sum(nil)
-	return hex.EncodeToString(bytes)
+	return obj.Sum(nil)
 }
