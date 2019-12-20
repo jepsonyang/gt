@@ -54,17 +54,17 @@ func String(length int, charSet int) string {
 	charPool := make([]byte, 0)
 
 	//数字
-	if charSet&KCharSetNum == 1 {
+	if charSet&KCharSetNum != 0 {
 		charPool = append(charPool, numbers...)
 	}
 
 	//大写字母
-	if charSet&KCharSetUpperLetter == 1 {
+	if charSet&KCharSetUpperLetter != 0 {
 		charPool = append(charPool, upperLetters...)
 	}
 
 	//小写字母
-	if charSet&KCharSetLowLetter == 1 {
+	if charSet&KCharSetLowLetter != 0 {
 		charPool = append(charPool, lowLetters...)
 	}
 
