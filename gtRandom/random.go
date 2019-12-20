@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	KCharSetNum         = 1
-	KCharSetUpperLetter = 1 << 1
-	KCharSetLowLetter   = 1 << 2
+	KCharSetNum         = 1				//数字
+	KCharSetUpperLetter = 1 << 1		//大写字母
+	KCharSetLowLetter   = 1 << 2		//小写字母
 )
 
 var counter int64
@@ -42,6 +42,12 @@ func ScopeInt64(min int64, max int64) int64 {
 	return min + random.Int63n(max-min)
 }
 
+/*
+* 生成随机字符串
+* @length 生成字符串的长度
+* @charSet 随机字符可能值集合，可使用KCharSetNum\KCharSetUpperLetter\KCharSetLowLetter按位与
+* @return 生成的随机字符串
+**/
 func String(length int, charSet int) string {
 	if length <= 0 {
 		return ""
