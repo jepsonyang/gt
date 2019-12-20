@@ -26,7 +26,7 @@ func count() int64 {
 * 生成指定范围内的随机数
 * @return 生成的随机数范围[min, max)
 **/
-func RandomScope(min int, max int) int {
+func ScopeInt(min int, max int) int {
 	seed := rand.NewSource(time.Now().UnixNano() + count())
 	random := rand.New(seed)
 	return min + random.Intn(max-min)
@@ -36,13 +36,13 @@ func RandomScope(min int, max int) int {
 * 生成指定范围内的随机数
 * @return 生成的随机数范围[min, max)
 **/
-func RandomScopeInt64(min int64, max int64) int64 {
+func ScopeInt64(min int64, max int64) int64 {
 	seed := rand.NewSource(time.Now().UnixNano() + count())
 	random := rand.New(seed)
 	return min + random.Int63n(max-min)
 }
 
-func RandomString(length int, charSet int) string {
+func String(length int, charSet int) string {
 	if length <= 0 {
 		return ""
 	}
