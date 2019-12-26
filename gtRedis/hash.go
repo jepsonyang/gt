@@ -20,13 +20,16 @@ func HashSet(conn redis.Conn, key string, value interface{}) error {
 /*
 * 获取hash值
 * @dst 必须传入结构体对象指针
-* @note 如果key不存在,不报错,dst的的值不变;如果key存在,redis hash中有的字段,会对应更新到dst结构体的相应字段,hash中不存在的字段，dst中对应字段值保持不变;
+* @note 如果key不存在,报错ErrKeyNotExist;如果key存在,redis hash中有的字段,会对应更新到dst结构体的相应字段,hash中不存在的字段，dst中对应字段值保持不变;
 * @使用经验 先判断是否存在，再获取hash值的情况，可以直接获取，然后判断dst的某个或某些关键字段是否为空，从而确认整个hash是否存在;
 **/
 func HashGet(conn redis.Conn, key string, dst interface{}) error {
 	arrReply, err := redis.Values(conn.Do("HGETALL", key))
 	if err != nil {
 		return formatError(err, "HGETALL failed. key: %s dst: %+v", key, dst)
+	}
+	if len(arrReply) <= 0 {
+		return ErrKeyNotExist
 	}
 	err = redis.ScanStruct(arrReply, dst)
 	if err != nil {
