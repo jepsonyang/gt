@@ -2,7 +2,7 @@ package gt
 
 /*
 * @purpose 定义用于JSON解析的基本类型
-* @note 前缀V表示valid
+* @note (1)前缀V表示valid; (2)MarshalJSON时，不考虑Valid字段
 **/
 
 import (
@@ -12,96 +12,96 @@ import (
 
 //VInt
 type VInt struct {
-	Int   int
+	Data  int
 	Valid bool
 }
 
 func (m VInt) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.Int)
+	return json.Marshal(m.Data)
 }
 
 func (m *VInt) UnmarshalJSON(data []byte) error {
-	err := json.Unmarshal(data, &m.Int)
+	err := json.Unmarshal(data, &m.Data)
 	m.Valid = err == nil
 	return err
 }
 
 //VInt64
 type VInt64 struct {
-	Int64 int64
+	Data  int64
 	Valid bool
 }
 
 func (m VInt64) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.Int64)
+	return json.Marshal(m.Data)
 }
 
 func (m *VInt64) UnmarshalJSON(data []byte) error {
-	err := json.Unmarshal(data, &m.Int64)
+	err := json.Unmarshal(data, &m.Data)
 	m.Valid = err == nil
 	return err
 }
 
 //VFloat32
 type VFloat struct {
-	Float32 float32
-	Valid   bool
+	Data  float32
+	Valid bool
 }
 
 func (m VFloat) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.Float32)
+	return json.Marshal(m.Data)
 }
 
 func (m *VFloat) UnmarshalJSON(data []byte) error {
-	err := json.Unmarshal(data, &m.Float32)
+	err := json.Unmarshal(data, &m.Data)
 	m.Valid = err == nil
 	return err
 }
 
 //VFloat64
 type VFloat64 struct {
-	Float64 float64
-	Valid   bool
+	Data  float64
+	Valid bool
 }
 
 func (m VFloat64) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.Float64)
+	return json.Marshal(m.Data)
 }
 
 func (m *VFloat64) UnmarshalJSON(data []byte) error {
-	err := json.Unmarshal(data, &m.Float64)
+	err := json.Unmarshal(data, &m.Data)
 	m.Valid = err == nil
 	return err
 }
 
 //VString
 type VString struct {
-	String string
-	Valid  bool
+	Data  string
+	Valid bool
 }
 
 func (m VString) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.String)
+	return json.Marshal(m.Data)
 }
 
 func (m *VString) UnmarshalJSON(data []byte) error {
-	err := json.Unmarshal(data, &m.String)
+	err := json.Unmarshal(data, &m.Data)
 	m.Valid = err == nil
 	return err
 }
 
 //VTime
 type VTime struct {
-	Time  time.Time
+	Data  time.Time
 	Valid bool
 }
 
 func (m VTime) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.Time)
+	return json.Marshal(m.Data)
 }
 
 func (m *VTime) UnmarshalJSON(data []byte) error {
-	err := json.Unmarshal(data, &m.Time)
+	err := json.Unmarshal(data, &m.Data)
 	m.Valid = err == nil
 	return err
 }
