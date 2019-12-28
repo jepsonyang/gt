@@ -14,6 +14,14 @@ func Expire(conn redis.Conn, key string, expire int) (bool, error) {
 }
 
 /*
+* 获取key的剩余生存时间(TTL: time to live; 单位: 秒)
+* @note key不存在返回-2; key存在，但未设置过期时间,返回-1;
+**/
+func TTL(conn redis.Conn, key string) (int, error) {
+	return redis.Int(conn.Do("TTL", key))
+}
+
+/*
 * 是否存在
 * @return 存在返回true，不存在返回false
 **/
