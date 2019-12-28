@@ -12,5 +12,5 @@ func formatError(err error, format string, v ...interface{}) error {
 		return nil
 	}
 	msg := fmt.Sprintf(format, v...)
-	return errors.New(fmt.Sprintf("%s originErr: %s", msg, err.Error()))
+	return fmt.Errorf("%s originErr: %s", msg, err.Error())
 }

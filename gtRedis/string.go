@@ -22,7 +22,7 @@ func StringSet(conn redis.Conn, key string, value string, expire int) error {
 
 /*
 * 获取string值
-* @note 获取不存在的key，会报错
+* @note 获取不存在的key，会报错ErrKeyNotExist
 **/
 func StringGet(conn redis.Conn, key string) (string, error) {
 	value, err := redis.String(conn.Do("GET", key))
