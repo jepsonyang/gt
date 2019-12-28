@@ -6,11 +6,21 @@ import (
 
 /*
 * 设置过期时间
+* @expire 指定值<=0时，会导致key马上被删除;
 * @return 设置成功返回true;当key不存在或者不能为key设置生存时间时(比如在低于2.1.3版本的Redis中你尝试更新key的生存时间),返回false;
 **/
 func Expire(conn redis.Conn, key string, expire int) (bool, error) {
 	result, err := redis.Int(conn.Do("EXPIRE", key, expire))
 	return result == 1, formatError(err, "EXPIRE failed. key: %s expire: %d", key, expire)
+}
+
+/*
+* 移除key的生存时间(使其永不过期)
+* @return 设置成功返回true;当key不存在或者key没有设置生存时间,返回false;
+**/
+func Persist(conn redis.Conn, key string) (bool, error) {
+	result, err := redis.Int(conn.Do("PERSIST", key))
+	return result == 1, formatError(err, "PERSIST failed. key: %s", key)
 }
 
 /*
