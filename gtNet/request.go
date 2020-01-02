@@ -7,11 +7,11 @@ import (
 )
 
 func Post(url string, headers map[string]string, bodyByte []byte) ([]byte, error) {
-	return request(url, headers, bodyByte, "POST")
+	return request(url, headers, bodyByte, http.MethodPost)
 }
 
 func Get(url string, headers map[string]string) ([]byte, error) {
-	return request(url, headers, []byte(""), "GET")
+	return request(url, headers, []byte(""), http.MethodGet)
 }
 
 func NewJsonHeader() map[string]string {
