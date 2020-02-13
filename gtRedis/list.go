@@ -91,7 +91,7 @@ func ListRPop(conn redis.Conn, key string) (string, error) {
 /*
 * 阻塞模式下，从list左侧弹出一个元素
 * @timeout 等待超时时间(单位: 秒)，0表示无限等待;
-* @return 弹出的元素值; 如果list不存在，会阻塞等待指定时间;如果等待超时，返回redis.ErrNil;
+* @return 弹出的元素值; 如果list不存在，会阻塞等待指定时间;如果等待超时，返回ErrTimeout;
 **/
 func ListBLPop(conn redis.Conn, key string, timeout int) (string, error) {
 	args := redis.Args{}
@@ -100,7 +100,7 @@ func ListBLPop(conn redis.Conn, key string, timeout int) (string, error) {
 	mapResult, err := redis.StringMap(conn.Do("BLPOP", args...))
 	if err != nil {
 		if err == redis.ErrNil {
-			return "", err
+			return "", ErrTimeout
 		}
 		return "", formatError(err, "BLPOP failed. key: %s timeout: %d", key, timeout)
 	}
@@ -114,7 +114,7 @@ func ListBLPop(conn redis.Conn, key string, timeout int) (string, error) {
 /*
 * 阻塞模式下，从list右侧弹出一个元素
 * @timeout 等待超时时间(单位: 秒)，0表示无限等待;
-* @return 弹出的元素值; 如果list不存在，会阻塞等待指定时间;如果等待超时，返回redis.ErrNil;
+* @return 弹出的元素值; 如果list不存在，会阻塞等待指定时间;如果等待超时，返回ErrTimeout;
 **/
 func ListBRPop(conn redis.Conn, key string, timeout int) (string, error) {
 	args := redis.Args{}
@@ -123,7 +123,7 @@ func ListBRPop(conn redis.Conn, key string, timeout int) (string, error) {
 	mapResult, err := redis.StringMap(conn.Do("BRPOP", args...))
 	if err != nil {
 		if err == redis.ErrNil {
-			return "", err
+			return "", ErrTimeout
 		}
 		return "", formatError(err, "BRPOP failed. key: %s timeout: %d", key, timeout)
 	}

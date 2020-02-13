@@ -6,6 +6,7 @@ import (
 )
 
 var ErrKeyNotExist = errors.New("key not exist")
+var ErrTimeout = errors.New("timeout")
 
 func formatError(err error, format string, v ...interface{}) error {
 	if err == nil {
