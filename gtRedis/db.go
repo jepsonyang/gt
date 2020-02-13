@@ -28,7 +28,8 @@ func Persist(conn redis.Conn, key string) (bool, error) {
 * @note key不存在返回-2; key存在，但未设置过期时间,返回-1;
 **/
 func TTL(conn redis.Conn, key string) (int, error) {
-	return redis.Int(conn.Do("TTL", key))
+	ttl, err := redis.Int(conn.Do("TTL", key))
+	return ttl, formatError(err, "TTL failed. key: %s", key)
 }
 
 /*
