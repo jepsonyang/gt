@@ -7,6 +7,18 @@ import (
 )
 
 /*
+http长连接并使用连接池,Client构造示例:
+	client := &http.Client{
+		Transport: &http.Transport{
+			MaxIdleConns:        500,
+			MaxIdleConnsPerHost: 500,
+			MaxConnsPerHost:     500,
+		},
+		Timeout: 5 * time.Second,
+	}
+*/
+
+/*
 * POST请求
 * @headers http请求头;可以使用NewJsonHeader()生成json请求头;
 * @client 允许传入自定义的Client对象;传入nil，每次请求将会临时生成默认Client对象;
