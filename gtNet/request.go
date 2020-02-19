@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-func Post(url string, headers map[string]string, bodyByte []byte) ([]byte, error) {
-	return request(url, headers, bodyByte, http.MethodPost)
+func Post(url string, headers map[string]string, bodyByte []byte, client *http.Client) ([]byte, error) {
+	return request(url, headers, bodyByte, http.MethodPost, client)
 }
 
-func Get(url string, headers map[string]string) ([]byte, error) {
-	return request(url, headers, []byte(""), http.MethodGet)
+func Get(url string, headers map[string]string, client *http.Client) ([]byte, error) {
+	return request(url, headers, []byte(""), http.MethodGet, client)
 }
 
 func NewJsonHeader() map[string]string {
@@ -20,8 +20,11 @@ func NewJsonHeader() map[string]string {
 	return header
 }
 
-func request(url string, headers map[string]string, bodyByte []byte, method string) ([]byte, error) {
-	req, err := http.NewRequest(method, url, bytes.NewBuffer(bodyByte))
+func request(url string, headers map[string]string, bodyByte []byte, method string, client *http.Client, ) ([]byte, error) {
+	var err error
+
+	var req *http.Request
+	req, err = http.NewRequest(method, url, bytes.NewBuffer(bodyByte))
 	if err != nil {
 		return nil, err
 	}
@@ -32,8 +35,11 @@ func request(url string, headers map[string]string, bodyByte []byte, method stri
 		}
 	}
 
-	client := http.Client{}
-	rsp, err := client.Do(req)
+	if client == nil {
+		client = &http.Client{}
+	}
+	var rsp *http.Response
+	rsp, err = client.Do(req)
 	if rsp != nil {
 		defer rsp.Body.Close()
 	}
@@ -41,7 +47,8 @@ func request(url string, headers map[string]string, bodyByte []byte, method stri
 		return nil, err
 	}
 
-	rspBody, err := ioutil.ReadAll(rsp.Body)
+	var rspBody []byte
+	rspBody, err = ioutil.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, err
 	}
