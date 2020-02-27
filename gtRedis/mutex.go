@@ -21,9 +21,6 @@ else
 end
 `
 
-var ErrLockExist = errors.New("lock already exist")
-var ErrLockNotExist = errors.New("lock not exist")
-
 var lockScript *redis.Script
 var unlockScript *redis.Script
 
