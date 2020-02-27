@@ -22,19 +22,19 @@ func init() {
 	uniqueLockScript = redis.NewScript(1, srcUniqueLockScript)
 }
 
-type MutexUni struct {
+type UniMutex struct {
 	key         string
 	uniqueValue string
 	expire      int
 }
 
-func (param *MutexUni) New(key string, uniqueValue string, expire int) {
+func (param *UniMutex) New(key string, uniqueValue string, expire int) {
 	param.key = "gtRedisUniMutex:" + key
 	param.uniqueValue = uniqueValue
 	param.expire = expire
 }
 
-func (param *MutexUni) Lock(conn redis.Conn) error {
+func (param *UniMutex) Lock(conn redis.Conn) error {
 	args := redis.Args{}
 	args = args.Add(param.key)
 	args = args.Add(param.uniqueValue)
