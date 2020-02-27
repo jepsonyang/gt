@@ -1,7 +1,6 @@
 package gtRedis
 
 import (
-	"errors"
 	"github.com/gomodule/redigo/redis"
 )
 
